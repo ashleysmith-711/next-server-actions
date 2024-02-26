@@ -54,9 +54,12 @@ export const DogProfile = ({
         <input type="hidden" name="id" id="id" value={id} />
         {!optimisticAdopted && <button
           className="bg-green-400 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-2"
-          formAction={formData => {
+          formAction={async formData => {
             updateOptimisticAdopted(true);
-            petAdoptedAction(formData)
+            const res = await petAdoptedAction(formData);
+            if (res) {
+              alert(res.error)
+            }
           }}>🐾</button>}
         <button
           className="bg-red-400 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2"

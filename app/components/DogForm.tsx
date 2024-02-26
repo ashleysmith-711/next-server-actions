@@ -4,20 +4,13 @@ import { createRef } from "react";
 import { createPetAction } from "../api/actions";
 import ClearSaveBtns from "./ClearSaveBtns";
 
-/**
- * - No api route needed
- * - Reduced network roundtrips
- * - useFormStatus() handles pending state
- * - useOptimistic enables immediate feedback to user that is reversed if necessary
- * - error handling
- */
 export const DogForm = () => {
   const ref = createRef<HTMLFormElement>();
   return (
     <form ref={ref} action={async formData => {
       const result = await createPetAction(formData);
       if (result?.error) {
-        alert('Something went wrong!')
+        alert(result.error)
       } else {
         ref.current?.reset();
       }

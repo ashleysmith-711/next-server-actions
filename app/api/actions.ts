@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "./prisma";
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -11,20 +11,20 @@ export const createPetAction = async (formData: FormData) => {
     const breed = formData.get('breed') as string;
     const description = formData.get('description') as string;
 
-
     try {
-        await prisma.pet.create({ 
-            data: { 
-                    name, 
-                    age: Number(age), 
-                    breed, 
-                    description 
-            }});
+        await prisma.pet.create({
+            data: {
+                name,
+                age: Number(age),
+                breed,
+                description
+            }
+        });
 
         revalidatePath('/');
     } catch (e) {
         return {
-            error: e
+            error: 'Cannot create pet, please try again'
         }
     }
 }
@@ -44,9 +44,7 @@ export const petAdoptedAction = async (formData: FormData) => {
         });
         revalidatePath('/')
     } catch (e) {
-        return {
-            error: e
-        }
+        return { error: 'Cannot mark pet as adopted :(' }
     }
 }
 
